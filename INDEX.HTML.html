@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MOCHA - Catálogo</title>
+  <style>
+    :root {
+      --primary: #1d4ed8;
+      --secondary: #eab308;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: 80px; }
+
+    header {
+      background: linear-gradient(135deg, #1e40af, #3b82f6);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+    }
+    .logo { font-size: 28px; font-weight: 800; letter-spacing: 1px; color: #facc15; }
+    .subtitle { font-size: 14px; opacity: 0.9; margin-top: 4px; }
+
+    .banner {
+      background: white;
+      margin: 15px;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+    .banner h2 { font-size: 18px; color: var(--primary); margin-bottom: 5px; }
+    .banner p { font-size: 13px; color: #64748b; }
+
+    .search-container { padding: 0 15px; margin-bottom: 15px; }
+    .search-bar {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 25px;
+      font-size: 15px;
+      outline: none;
+    }
+    .search-bar:focus { border-color: var(--primary); }
+
+    .categories {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 0 15px 10px;
+      scrollbar-width: none;
+    }
+    .categories::-webkit-scrollbar { display: none; }
+    .cat-btn {
+      background: white;
+      border: 1px solid #cbd5e1;
+      padding: 8px 16px;
+      border-radius: 20px;
+      white-space: nowrap;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .cat-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+    .counter { padding: 0 15px; font-weight: 600; font-size: 14px; color: #475569; margin-bottom: 10px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 15px;
+      padding: 0 15px;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+    }
+    .card img { width: 100%; height: 180px; object-fit: cover; }
+    .card-info { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .card-price { font-size: 15px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+
+    .controls { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
+    .btn-qty {
+      background: #f1f5f9;
+      border: none;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .qty { font-size: 14px; font-weight: 600; }
+    .btn-add {
+      background: var(--secondary);
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .cart-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: 12px 20px;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn-whatsapp {
+      background: #25d366;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">MOCHA</div>
+    <div class="subtitle">CATÁLOGO DE PRODUCTOS</div>
+  </header>
+
+  <div class="banner">
+    <h2>Arma tu pedido en un minuto</h2>
+    <p>Selecciona tus diseños y envíanos la lista directamente por WhatsApp.</p>
+  </div>
+
+  <div class="search-container">
+    <input type="text" id="searchInput" class="search-bar" placeholder="Buscar por personaje o diseño..." oninput="filtrarProductos()">
+  </div>
+
+  <div class="categories">
+    <button class="cat-btn active" onclick="filtrarCategoria('Todos', this)">Todos</button>
+    <button class="cat-btn" onclick="filtrarCategoria('Bob Esponja', this)">Bob Esponja</button>
+    <button class="cat-btn" onclick="filtrarCategoria('Volver al Futuro', this)">Volver al Futuro</button>
+    <button class="cat-btn" onclick="filtrarCategoria('Hot Wheels', this)">Hot Wheels</button>
+  </div>
+
+  <div class="counter"><span id="modelCount">0</span> modelos disponibles</div>
+
+  <div class="grid" id="productGrid"></div>
+
+  <div class="cart-bar">
+    <div>
+      <div style="font-size: 12px; color: #64748b;">Total seleccionados:</div>
+      <div style="font-size: 16px; font-weight: 700;" id="cartCount">0 productos</div>
+    </div>
+    <button class="btn-whatsapp" onclick="enviarWhatsApp()">Enviar por WhatsApp 🚀</button>
+  </div>
+
+  <script>
+    // LISTA DE PRODUCTOS (Puedes editar o agregar más aquí)
+    const productos = [
+      { id: 1, nombre: "Bob Esponja Clásico", categoria: "Bob Esponja", precio: 3.5, imagen: "https://via.placeholder.com/200x200?text=Bob+Esponja" },
+      { id: 2, nombre: "Bob Esponja Piña", categoria: "Bob Esponja", precio: 3.5, imagen: "https://via.placeholder.com/200x200?text=Bob+Pina" },
+      { id: 3, nombre: "DeLorean Time Machine", categoria: "Volver al Futuro", precio: 4.0, imagen: "https://via.placeholder.com/200x200?text=Volver+al+Futuro" },
+      { id: 4, nombre: "Hot Wheels Camo", categoria: "Hot Wheels", precio: 3.5, imagen: "https://via.placeholder.com/200x200?text=Hot+Wheels" }
+    ];
+
+    let carrito = {};
+    let categoriaActual = 'Todos';
+
+    function renderizarProductos(lista) {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = '';
+      document.getElementById('modelCount').innerText = lista.length;
+
+      lista.forEach(p => {
+        const qty = carrito[p.id] || 0;
+        grid.innerHTML += `
+          <div class="card">
+            <img src="${p.imagen}" alt="${p.nombre}">
+            <div class="card-info">
+              <div>
+                <div class="card-title">${p.nombre}</div>
+                <div class="card-price">$${p.precio.toFixed(2)}</div>
+              </div>
+              <div class="controls">
+                <button class="btn-qty" onclick="cambiarCantidad(${p.id}, -1)">-</button>
+                <span class="qty">${qty}</span>
+                <button class="btn-qty" onclick="cambiarCantidad(${p.id}, 1)">+</button>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function cambiarCantidad(id, cambio) {
+      if (!carrito[id]) carrito[id] = 0;
+      carrito[id] += cambio;
+      if (carrito[id] <= 0) delete carrito[id];
+      
+      actualizarCarrito();
+      filtrarProductos();
+    }
+
+    function actualizarCarrito() {
+      const totalItems = Object.values(carrito).reduce((a, b) => a + b, 0);
+      document.getElementById('cartCount').innerText = `${totalItems} productos`;
+    }
+
+    function filtrarProductos() {
+      const texto = document.getElementById('searchInput').value.toLowerCase();
+      const filtrados = productos.filter(p => {
+        const coincideCat = categoriaActual === 'Todos' || p.categoria === categoriaActual;
+        const coincideTexto = p.nombre.toLowerCase().includes(texto) || p.categoria.toLowerCase().includes(texto);
+        return coincideCat && coincideTexto;
+      });
+      renderizarProductos(filtrados);
+    }
+
+    function filtrarCategoria(cat, btn) {
+      categoriaActual = cat;
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      filtrarProductos();
+    }
+
+    function enviarWhatsApp() {
+      const ids = Object.keys(carrito);
+      if (ids.length === 0) {
+        alert("Por favor selecciona al menos un producto.");
+        return;
+      }
+
+      let mensaje = "Hola *MOCHA*, me gustaría hacer el siguiente pedido:\n\n";
+      let total = 0;
+
+      ids.forEach(id => {
+        const prod = productos.find(p => p.id == id);
+        const cant = carrito[id];
+        const subtotal = prod.precio * cant;
+        total += subtotal;
+        mensaje += `• ${cant}x ${prod.nombre} - $${subtotal.toFixed(2)}\n`;
+      });
+
+      mensaje += `\n*Total estimado: $${total.toFixed(2)}*`;
+
+      const telefono = "584226008475";
+      const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
+      window.open(url, '_blank');
+    }
+
+    renderizarProductos(productos);
+  </script>
+</body>
+</html>
