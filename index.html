@@ -3,268 +3,552 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MOCHA - Catálogo</title>
+  <title>MOCHA | Catálogo de Productos</title>
   <style>
     :root {
-      --primary: #1d4ed8;
-      --secondary: #eab308;
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --text: #0f172a;
+      --azul-primario: #1A499F;
+      --rosa-acento: #FF1493;
+      --amarillo-mocha: #FFE135;
+      --azul-resaltado: #4C8BF3;
+      --gris-carbon: #333333;
+      --blanco: #FFFFFF;
+      --whatsapp-green: #25D366;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding-bottom: 80px; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
+    body {
+      background-color: var(--azul-primario);
+      color: var(--gris-carbon);
+      padding-bottom: 100px;
+    }
+
+    /* HEADER */
     header {
-      background: linear-gradient(135deg, #1e40af, #3b82f6);
-      color: white;
+      background-color: var(--azul-primario);
+      text-align: center;
+      padding: 25px 15px 15px;
+      color: var(--blanco);
+    }
+
+    header h1 {
+      color: var(--amarillo-mocha);
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+    }
+
+    header p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 15px;
+    }
+
+    /* GUÍA DE COMPRA (PASOS) */
+    .banner-guia {
+      background-color: var(--blanco);
+      border-radius: 16px;
       padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      border-top: 5px solid var(--rosa-acento);
       text-align: center;
-      border-bottom-left-radius: 20px;
-      border-bottom-right-radius: 20px;
     }
-    .logo { font-size: 28px; font-weight: 800; letter-spacing: 1px; color: #facc15; }
-    .subtitle { font-size: 14px; opacity: 0.9; margin-top: 4px; }
 
-    .banner {
-      background: white;
-      margin: 15px;
-      padding: 15px;
+    .banner-guia h2 {
+      color: var(--azul-primario);
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+      font-weight: 800;
+    }
+
+    .banner-guia .subtitulo-guia {
+      color: var(--gris-carbon);
+      font-size: 0.95rem;
+      line-height: 1.4;
+      margin-bottom: 18px;
+    }
+
+    .pasos-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .paso-box {
+      background-color: #F4F7FE;
+      padding: 12px 15px;
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      text-align: center;
-    }
-    .banner h2 { font-size: 18px; color: var(--primary); margin-bottom: 5px; }
-    .banner p { font-size: 13px; color: #64748b; }
-
-    .search-container { padding: 0 15px; margin-bottom: 15px; }
-    .search-bar {
-      width: 100%;
-      padding: 12px 16px;
-      border: 2px solid #e2e8f0;
-      border-radius: 25px;
-      font-size: 15px;
-      outline: none;
-    }
-    .search-bar:focus { border-color: var(--primary); }
-
-    .categories {
+      border: 1px solid #E2E8F0;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--azul-primario);
       display: flex;
-      gap: 8px;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .paso-numero {
+      background-color: var(--rosa-acento);
+      color: var(--blanco);
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+
+    /* BUSCADOR Y FILTROS */
+    .search-box {
+      margin-bottom: 15px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 30px;
+      border: 2px solid var(--azul-resaltado);
+      font-size: 1rem;
+      outline: none;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .categorias {
+      display: flex;
+      gap: 10px;
       overflow-x: auto;
-      padding: 0 15px 10px;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
       scrollbar-width: none;
     }
-    .categories::-webkit-scrollbar { display: none; }
-    .cat-btn {
-      background: white;
-      border: 1px solid #cbd5e1;
-      padding: 8px 16px;
-      border-radius: 20px;
-      white-space: nowrap;
-      font-size: 13px;
-      cursor: pointer;
+
+    .categorias::-webkit-scrollbar {
+      display: none;
     }
-    .cat-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-    .counter { padding: 0 15px; font-weight: 600; font-size: 14px; color: #475569; margin-bottom: 10px; }
+    .btn-cat {
+      background-color: var(--blanco);
+      color: var(--azul-primario);
+      border: 2px solid var(--blanco);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      font-size: 0.9rem;
+    }
 
-    .grid {
+    .btn-cat.active, .btn-cat:hover {
+      background-color: var(--rosa-acento);
+      color: var(--blanco);
+      border-color: var(--rosa-acento);
+    }
+
+    /* GRID DE PRODUCTOS */
+    .contador-modelos {
+      color: var(--blanco);
+      font-weight: 600;
+      margin-bottom: 12px;
+      font-size: 0.9rem;
+    }
+
+    .productos-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 15px;
-      padding: 0 15px;
     }
+
+    @media (min-width: 600px) {
+      .productos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+      }
+    }
+
     .card {
-      background: var(--card-bg);
-      border-radius: 12px;
+      background-color: var(--blanco);
+      border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s;
     }
-    .card img { width: 100%; height: 180px; object-fit: cover; }
-    .card-info { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-    .card-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
-    .card-price { font-size: 15px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
 
-    .controls { display: flex; align-items: center; justify-content: space-between; gap: 5px; }
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card-img-container {
+      width: 100%;
+      height: 180px;
+      background-color: #F8FAFC;
+      position: relative;
+    }
+
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .badge-categoria {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background-color: var(--azul-resaltado);
+      color: var(--blanco);
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+    }
+
+    .card-body {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--gris-carbon);
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+
+    .card-precio {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--rosa-acento);
+      margin-bottom: 10px;
+    }
+
+    /* CONTROLES DE CANTIDAD */
+    .controls {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #F1F5F9;
+      border-radius: 10px;
+      padding: 4px;
+      margin-top: 8px;
+    }
+
     .btn-qty {
-      background: #f1f5f9;
+      width: 32px;
+      height: 32px;
       border: none;
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-      font-weight: bold;
+      background-color: var(--blanco);
+      color: var(--azul-primario);
+      font-size: 1.2rem;
+      font-weight: 800;
+      border-radius: 8px;
       cursor: pointer;
-    }
-    .qty { font-size: 14px; font-weight: 600; }
-    .btn-add {
-      background: var(--secondary);
-      border: none;
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 12px;
-      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
 
+    .btn-qty:active {
+      background-color: var(--amarillo-mocha);
+    }
+
+    .qty-number {
+      font-weight: 800;
+      font-size: 0.95rem;
+      color: var(--gris-carbon);
+    }
+
+    /* BARRA INFERIOR FLOTANTE */
     .cart-bar {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: white;
+      background-color: var(--blanco);
       padding: 12px 20px;
-      box-shadow: 0 -4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      z-index: 1000;
     }
+
+    .cart-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-info span {
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .cart-info strong {
+      font-size: 1.1rem;
+      color: var(--azul-primario);
+      font-weight: 900;
+    }
+
     .btn-whatsapp {
-      background: #25d366;
-      color: white;
+      background-color: var(--whatsapp-green);
+      color: var(--blanco);
       border: none;
       padding: 12px 20px;
       border-radius: 25px;
-      font-weight: 700;
-      font-size: 14px;
+      font-weight: 800;
+      font-size: 0.95rem;
       cursor: pointer;
-      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+      transition: transform 0.2s;
+    }
+
+    .btn-whatsapp:active {
+      transform: scale(0.96);
     }
   </style>
 </head>
 <body>
 
   <header>
-    <div class="logo">MOCHA</div>
-    <div class="subtitle">CATÁLOGO DE PRODUCTOS</div>
+    <h1>MOCHA</h1>
+    <p>CATÁLOGO DE PRODUCTOS</p>
   </header>
 
-  <div class="banner">
-    <h2>Arma tu pedido en un minuto</h2>
-    <p>Selecciona tus diseños y envíanos la lista directamente por WhatsApp.</p>
-  </div>
-
-  <div class="search-container">
-    <input type="text" id="searchInput" class="search-bar" placeholder="Buscar por personaje o diseño..." oninput="filtrarProductos()">
-  </div>
-
-  <div class="categories">
-    <button class="cat-btn active" onclick="filtrarCategoria('Todos', this)">Todos</button>
-    <button class="cat-btn" onclick="filtrarCategoria('Bob Esponja', this)">Bob Esponja</button>
-    <button class="cat-btn" onclick="filtrarCategoria('Volver al Futuro', this)">Volver al Futuro</button>
-    <button class="cat-btn" onclick="filtrarCategoria('Hot Wheels', this)">Hot Wheels</button>
-  </div>
-
-  <div class="counter"><span id="modelCount">0</span> modelos disponibles</div>
-
-  <div class="grid" id="productGrid"></div>
-
-  <div class="cart-bar">
-    <div>
-      <div style="font-size: 12px; color: #64748b;">Total seleccionados:</div>
-      <div style="font-size: 16px; font-weight: 700;" id="cartCount">0 productos</div>
+  <div class="container">
+    
+    <!-- GUÍA AL USUARIO -->
+    <div class="banner-guia">
+      <h2>Arma tu pedido en un minuto</h2>
+      <p class="subtitulo-guia">Busca tus diseños favoritos, arma la lista y mándanosla por WhatsApp. Nosotros te confirmamos precio y disponibilidad al momento.</p>
+      
+      <div class="pasos-container">
+        <div class="paso-box">
+          <div class="paso-numero">1</div>
+          <span>Busca tus favoritas</span>
+        </div>
+        <div class="paso-box">
+          <div class="paso-numero">2</div>
+          <span>Agrégalas al carrito</span>
+        </div>
+        <div class="paso-box">
+          <div class="paso-numero">3</div>
+          <span>Envíanoslo al WhatsApp</span>
+        </div>
+      </div>
     </div>
-    <button class="btn-whatsapp" onclick="enviarWhatsApp()">Enviar por WhatsApp 🚀</button>
+
+    <!-- BUSCADOR -->
+    <div class="search-box">
+      <input type="text" id="searchInput" class="search-input" placeholder="Buscar por diseño o modelo...">
+    </div>
+
+    <!-- FILTROS DE CATEGORÍA -->
+    <div class="categorias">
+      <button class="btn-cat active" onclick="filtrarCategoria('Todas')">Todas</button>
+      <button class="btn-cat" onclick="filtrarCategoria('Largas')">Largas</button>
+      <button class="btn-cat" onclick="filtrarCategoria('Medianas')">Medianas</button>
+      <button class="btn-cat" onclick="filtrarCategoria('Cortas')">Cortas</button>
+      <button class="btn-cat" onclick="filtrarCategoria('Especiales')">Especiales</button>
+    </div>
+
+    <div class="contador-modelos" id="contadorModelos">Cargando modelos...</div>
+
+    <!-- GRID DE PRODUCTOS -->
+    <div class="productos-grid" id="productosGrid"></div>
+
+  </div>
+
+  <!-- BARRA FLOTANTE WHATSAPP -->
+  <div class="cart-bar">
+    <div class="cart-info">
+      <span>Total seleccionados:</span>
+      <strong id="totalParesText">0 pares</strong>
+    </div>
+    <button class="btn-whatsapp" onclick="enviarWhatsApp()">
+      Enviar por WhatsApp 🚀
+    </button>
   </div>
 
   <script>
-    // LISTA DE PRODUCTOS (Puedes editar o agregar más aquí)
+    // ==========================================
+    // LISTA DE PRODUCTOS
+    // Categorías permitidas: "Largas", "Medianas", "Cortas", "Especiales"
+    // Solo la categoría "Especiales" muestra precio.
+    // ==========================================
     const productos = [
-      { id: 1, nombre: "Estrellas Mario", categoria: "Mario", precio: 5, imagen: "mario.jpg" },
-      { id: 2, nombre: "Bob Esponja Piña", categoria: "Bob Esponja", precio: 3.5, imagen: "https://via.placeholder.com/200x200?text=Bob+Pina" },
-      { id: 3, nombre: "DeLorean Time Machine", categoria: "Volver al Futuro", precio: 4.0, imagen: "https://via.placeholder.com/200x200?text=Volver+al+Futuro" },
-      { id: 4, nombre: "Hot Wheels Camo", categoria: "Hot Wheels", precio: 3.5, imagen: "https://via.placeholder.com/200x200?text=Hot+Wheels" }
+      { id: 1, nombre: "Estrellas Mario", categoria: "Largas", precio: null, imagen: "mario.jpg" },
+      { id: 2, nombre: "Bob Esponja Piña", categoria: "Medianas", precio: null, imagen: "bob.jpg" },
+      { id: 3, nombre: "DeLorean Time Machine", categoria: "Cortas", precio: null, imagen: "delorean.jpg" },
+      { id: 4, nombre: "Edición Especial Lujo", categoria: "Especiales", precio: 6.50, imagen: "especial.jpg" }
     ];
 
+    // NÚMERO DE TELEFONO DE WHATSAPP MOCHA
+    const TELEFONO_WHATSAPP = "584226008475";
+
     let carrito = {};
-    let categoriaActual = 'Todos';
+    let categoriaActual = "Todas";
 
-    function renderizarProductos(lista) {
-      const grid = document.getElementById('productGrid');
-      grid.innerHTML = '';
-      document.getElementById('modelCount').innerText = lista.length;
+    // INICIALIZACIÓN
+    document.addEventListener("DOMContentLoaded", () => {
+      renderProductos();
+      
+      document.getElementById('searchInput').addEventListener('input', (e) => {
+        renderProductos(e.target.value);
+      });
+    });
 
-      lista.forEach(p => {
-        const qty = carrito[p.id] || 0;
-        grid.innerHTML += `
-          <div class="card">
-            <img src="${p.imagen}" alt="${p.nombre}">
-            <div class="card-info">
-              <div>
-                <div class="card-title">${p.nombre}</div>
-                <div class="card-price">$${p.precio.toFixed(2)}</div>
-              </div>
-              <div class="controls">
-                <button class="btn-qty" onclick="cambiarCantidad(${p.id}, -1)">-</button>
-                <span class="qty">${qty}</span>
-                <button class="btn-qty" onclick="cambiarCantidad(${p.id}, 1)">+</button>
-              </div>
+    // FILTRAR CATEGORÍA
+    function filtrarCategoria(cat) {
+      categoriaActual = cat;
+      
+      const botones = document.querySelectorAll('.btn-cat');
+      botones.forEach(btn => {
+        if(btn.innerText === cat || (cat === 'Todas' && btn.innerText === 'Todas')) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      const busqueda = document.getElementById('searchInput').value;
+      renderProductos(busqueda);
+    }
+
+    // MOSTRAR PRODUCTOS EN PANTALLA
+    function renderProductos(busqueda = "") {
+      const grid = document.getElementById('productosGrid');
+      grid.innerHTML = "";
+
+      const filtrados = productos.filter(p => {
+        const coincideCat = categoriaActual === "Todas" || p.categoria === categoriaActual;
+        const coincideBusqueda = p.nombre.toLowerCase().includes(busqueda.toLowerCase());
+        return coincideCat && coincideBusqueda;
+      });
+
+      document.getElementById('contadorModelos').innerText = `${filtrados.length} modelos disponibles`;
+
+      filtrados.forEach(p => {
+        const cantidad = carrito[p.id] || 0;
+        
+        // Solo muestra el precio si pertenece a "Especiales"
+        const mostrarPrecio = (p.categoria === "Especiales" && p.precio) 
+          ? `<div class="card-precio">$${p.precio.toFixed(2)}</div>` 
+          : '';
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div>
+            <div class="card-img-container">
+              <span class="badge-categoria">${p.categoria}</span>
+              <img src="${p.imagen}" alt="${p.nombre}" class="card-img" onerror="this.src='https://via.placeholder.com/200x200?text=Foto+Mocha'">
+            </div>
+            <div class="card-body">
+              <div class="card-title">${p.nombre}</div>
+              ${mostrarPrecio}
+            </div>
+          </div>
+          <div style="padding: 0 12px 12px 12px;">
+            <div class="controls">
+              <button class="btn-qty" onclick="cambiarCantidad(${p.id}, -1)">-</button>
+              <span class="qty-number">${cantidad}</span>
+              <button class="btn-qty" onclick="cambiarCantidad(${p.id}, 1)">+</button>
             </div>
           </div>
         `;
+        grid.appendChild(card);
       });
     }
 
+    // CAMBIAR CANTIDAD SELECCIONADA
     function cambiarCantidad(id, cambio) {
-      if (!carrito[id]) carrito[id] = 0;
-      carrito[id] += cambio;
-      if (carrito[id] <= 0) delete carrito[id];
+      const actual = carrito[id] || 0;
+      const nueva = actual + cambio;
+
+      if (nueva <= 0) {
+        delete carrito[id];
+      } else {
+        carrito[id] = nueva;
+      }
+
+      actualizarBarraInferior();
+      const busqueda = document.getElementById('searchInput').value;
+      renderProductos(busqueda);
+    }
+
+    // ACTUALIZAR CONTADOR TOTAL
+    function actualizarBarraInferior() {
+      let totalPares = 0;
+      Object.values(carrito).forEach(qty => totalPares += qty);
       
-      actualizarCarrito();
-      filtrarProductos();
+      const texto = totalPares === 1 ? "1 par" : `${totalPares} pares`;
+      document.getElementById('totalParesText').innerText = texto;
     }
 
-    function actualizarCarrito() {
-      const totalItems = Object.values(carrito).reduce((a, b) => a + b, 0);
-      document.getElementById('cartCount').innerText = `${totalItems} productos`;
-    }
-
-    function filtrarProductos() {
-      const texto = document.getElementById('searchInput').value.toLowerCase();
-      const filtrados = productos.filter(p => {
-        const coincideCat = categoriaActual === 'Todos' || p.categoria === categoriaActual;
-        const coincideTexto = p.nombre.toLowerCase().includes(texto) || p.categoria.toLowerCase().includes(texto);
-        return coincideCat && coincideTexto;
-      });
-      renderizarProductos(filtrados);
-    }
-
-    function filtrarCategoria(cat, btn) {
-      categoriaActual = cat;
-      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      filtrarProductos();
-    }
-
+    // GENERAR MENSAJE Y ENVIAR A WHATSAPP
     function enviarWhatsApp() {
-      const ids = Object.keys(carrito);
-      if (ids.length === 0) {
-        alert("Por favor selecciona al menos un producto.");
+      const idsSeleccionados = Object.keys(carrito);
+
+      if (idsSeleccionados.length === 0) {
+        alert("Por favor selecciona al menos un par de medias para enviar tu pedido.");
         return;
       }
 
-      let mensaje = "Hola *MOCHA*, me gustaría hacer el siguiente pedido:\n\n";
-      let total = 0;
+      let mensaje = "*PEDIDO MOCHA*\n\n";
+      let contador = 1;
+      let totalPares = 0;
 
-      ids.forEach(id => {
+      idsSeleccionados.forEach(id => {
         const prod = productos.find(p => p.id == id);
-        const cant = carrito[id];
-        const subtotal = prod.precio * cant;
-        total += subtotal;
-        mensaje += `• ${cant}x ${prod.nombre} - $${subtotal.toFixed(2)}\n`;
+        const cantidad = carrito[id];
+        const textoPar = cantidad === 1 ? "1 par" : `${cantidad} pares`;
+        
+        mensaje += `${contador}. ${prod.nombre} — ${textoPar}\n`;
+        contador++;
+        totalPares += cantidad;
       });
 
-      mensaje += `\n*Total estimado: $${total.toFixed(2)}*`;
+      const totalTextoPares = totalPares === 1 ? "1 par" : `${totalPares} pares`;
 
-      const telefono = "584226008475";
-      const url = `https://wa.me/${telefono}?text=${encodeURIComponent(mensaje)}`;
-      window.open(url, '_blank');
+      mensaje += `\nTotal: ${totalTextoPares}\n\n`;
+      mensaje += "Enviado desde el catálogo web. Quedo pendiente por precios y disponibilidad.";
+
+      const urlWhatsApp = `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
+      window.open(urlWhatsApp, '_blank');
     }
-
-    renderizarProductos(productos);
   </script>
 </body>
 </html>
