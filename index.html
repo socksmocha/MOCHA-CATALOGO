@@ -14,6 +14,7 @@
       --gris-suave: #888888;
       --blanco: #FFFFFF;
       --whatsapp-green: #25D366;
+      --rojo-eliminar: #FF3B30;
     }
 
     * {
@@ -74,7 +75,28 @@
       text-transform: uppercase;
     }
 
-    /* BOTÓN "MI PEDIDO" ARRIBA A LA DERECHA */
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* AVISO TASA BCV EURO */
+    .bcv-badge {
+      background-color: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: var(--blanco);
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* BOTÓN "MI PEDIDO" */
     .btn-mi-pedido {
       background-color: var(--amarillo-mocha);
       color: var(--gris-texto);
@@ -108,7 +130,7 @@
       margin-left: 2px;
     }
 
-    /* HERO BANNER CON FRANJAS DIAGONALES */
+    /* HERO BANNER */
     .hero-banner {
       background: repeating-linear-gradient(
         135deg,
@@ -118,7 +140,7 @@
         #1c3ea5 44px
       );
       color: var(--blanco);
-      padding: 24px 20px 28px;
+      padding: 24px 20px 24px;
       text-align: left;
     }
 
@@ -126,20 +148,12 @@
       font-size: 1.8rem;
       font-weight: 900;
       line-height: 1.15;
-      margin-bottom: 12px;
+      margin-bottom: 16px;
     }
 
     .hero-title span {
       color: var(--amarillo-mocha);
       display: block;
-    }
-
-    .hero-desc {
-      font-size: 0.92rem;
-      line-height: 1.45;
-      opacity: 0.95;
-      margin-bottom: 20px;
-      font-weight: 400;
     }
 
     /* PASOS EN PILLS TRASLÚCIDAS */
@@ -303,7 +317,7 @@
     }
 
     .card-price {
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-weight: 900;
       color: var(--magenta-mocha);
       margin-bottom: 10px;
@@ -503,9 +517,10 @@
       margin-bottom: 2px;
     }
 
-    .cart-item-category {
-      font-size: 0.8rem;
-      color: #777777;
+    .cart-item-subtext {
+      font-size: 0.82rem;
+      color: var(--magenta-mocha);
+      font-weight: 700;
       margin-bottom: 8px;
     }
 
@@ -535,17 +550,24 @@
       font-size: 0.95rem;
     }
 
+    /* BOTÓN ELIMINAR CON ICONO ROJO */
     .btn-quitar-item {
       background: none;
       border: none;
-      color: var(--gris-texto);
-      font-weight: 700;
-      font-size: 0.85rem;
-      text-decoration: underline;
+      color: var(--rojo-eliminar);
+      font-size: 1.25rem;
       cursor: pointer;
       margin-left: auto;
-      align-self: flex-end;
-      padding-bottom: 4px;
+      align-self: center;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s ease;
+    }
+
+    .btn-quitar-item:active {
+      transform: scale(0.85);
     }
 
     /* SECCIÓN CREMA DE FORMULARIO Y RESUMEN */
@@ -553,6 +575,39 @@
       background-color: #FFFDF5;
       border-top: 1px solid #F0EBDC;
       padding: 20px 20px 25px;
+    }
+
+    .cart-summary-box {
+      background-color: var(--blanco);
+      border: 1px solid #E2DED5;
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      color: #666666;
+      margin-bottom: 6px;
+    }
+
+    .summary-row.total-row {
+      border-top: 1px dashed #E2DED5;
+      padding-top: 8px;
+      margin-top: 8px;
+      margin-bottom: 0;
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--gris-texto);
+    }
+
+    .summary-total-price {
+      color: var(--magenta-mocha);
+      font-size: 1.3rem;
+      font-weight: 900;
     }
 
     .form-group {
@@ -606,6 +661,12 @@
       transform: scale(0.98);
     }
 
+    .whatsapp-icon-svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
     .empty-cart-msg {
       text-align: center;
       color: #888888;
@@ -626,10 +687,13 @@
       </div>
     </div>
 
-    <button class="btn-mi-pedido" onclick="openCartModal()">
-      🛒 Mi pedido
-      <span class="badge-cart-count" id="cartCountBadge">0</span>
-    </button>
+    <div class="header-actions">
+      <div class="bcv-badge">💶 BCV Euro</div>
+      <button class="btn-mi-pedido" onclick="openCartModal()">
+        🛒 Mi pedido
+        <span class="badge-cart-count" id="cartCountBadge">0</span>
+      </button>
+    </div>
   </header>
 
   <!-- HERO BANNER GUÍA -->
@@ -638,9 +702,6 @@
       Arma tu pedido
       <span>en un minuto</span>
     </h2>
-    <p class="hero-desc">
-      Busca tus diseños favoritos, arma la lista y mándanosla por WhatsApp. Nosotros te confirmamos precio y disponibilidad al momento.
-    </p>
 
     <div class="steps-container">
       <div class="step-pill">
@@ -670,9 +731,9 @@
     <!-- CATEGORÍAS -->
     <div class="categories-bar">
       <button class="cat-btn active" onclick="filtrarCategoria('Todo')">Todo</button>
-      <button class="cat-btn" onclick="filtrarCategoria('Largas')">Largas</button>
-      <button class="cat-btn" onclick="filtrarCategoria('Medianas')">Medianas</button>
-      <button class="cat-btn" onclick="filtrarCategoria('Cortas')">Cortas</button>
+      <button class="cat-btn" onclick="filtrarCategoria('Largas')">Largas ($5)</button>
+      <button class="cat-btn" onclick="filtrarCategoria('Medianas')">Medianas ($4)</button>
+      <button class="cat-btn" onclick="filtrarCategoria('Cortas')">Cortas ($3)</button>
       <button class="cat-btn" onclick="filtrarCategoria('Especiales')">Especiales</button>
     </div>
 
@@ -708,7 +769,7 @@
   </div>
 
   <script>
-    // LISTA DE PRODUCTOS CON EXTENSIÓN .JPEG ACTUALIZADA
+    // LISTA DE PRODUCTOS CON EXTENSIÓN .JPEG
     const productos = [
       { id: 1, nombre: "Stitch Rayas (Gris / Azul)", categoria: "Largas", imagen: "media_1.jpeg" },
       { id: 2, nombre: "Off The Wall (Negro)", categoria: "Largas", imagen: "media_2.jpeg" },
@@ -849,6 +910,17 @@
     let carrito = {};
     let categoriaSeleccionada = "Todo";
 
+    // ASIGNACIÓN DE PRECIOS POR CATEGORÍA
+    function obtenerPrecio(producto) {
+      if (producto.precio !== undefined) return producto.precio;
+      switch (producto.categoria) {
+        case 'Largas': return 5;
+        case 'Medianas': return 4;
+        case 'Cortas': return 3;
+        default: return 5;
+      }
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
       renderProductos();
 
@@ -861,7 +933,7 @@
       categoriaSeleccionada = cat;
       const botones = document.querySelectorAll('.cat-btn');
       botones.forEach(btn => {
-        if (btn.innerText === cat) {
+        if (btn.innerText.includes(cat)) {
           btn.classList.add('active');
         } else {
           btn.classList.remove('active');
@@ -884,9 +956,7 @@
 
       filtrados.forEach(p => {
         const cantidad = carrito[p.id] || 0;
-        const mostrarPrecio = (p.categoria === "Especiales" && p.precio) 
-          ? `<div class="card-price">$${p.precio.toFixed(2)}</div>` 
-          : '';
+        const precio = obtenerPrecio(p);
 
         let botonOControles = '';
         if (cantidad === 0) {
@@ -910,7 +980,7 @@
             </div>
             <div class="card-content">
               <div class="card-title">${p.nombre}</div>
-              ${mostrarPrecio}
+              <div class="card-price">$${precio}</div>
             </div>
           </div>
           <div style="padding: 0 12px 12px 12px;">
@@ -975,23 +1045,31 @@
       }
 
       let itemsHtml = '<div class="cart-items-container">';
+      let totalPares = 0;
+      let totalMonto = 0;
+
       itemIds.forEach(id => {
         const p = productos.find(item => item.id == id);
         const qty = carrito[id];
         if (p) {
+          const precioUnitario = obtenerPrecio(p);
+          const subtotal = precioUnitario * qty;
+          totalPares += qty;
+          totalMonto += subtotal;
+
           itemsHtml += `
             <div class="cart-item-row">
               <img src="${p.imagen}" alt="${p.nombre}" class="cart-item-img" onerror="this.src='https://via.placeholder.com/60?text=Mocha'">
               <div class="cart-item-details">
                 <div class="cart-item-name">${p.nombre}</div>
-                <div class="cart-item-category">${p.categoria}</div>
+                <div class="cart-item-subtext">${p.categoria} · $${precioUnitario} c/u ($${subtotal})</div>
                 <div class="cart-item-qty-row">
                   <button class="btn-circle-qty" onclick="cambiarCantidad(${p.id}, -1)">-</button>
                   <span class="cart-qty-num">${qty}</span>
                   <button class="btn-circle-qty" onclick="cambiarCantidad(${p.id}, 1)">+</button>
                 </div>
               </div>
-              <button class="btn-quitar-item" onclick="eliminarDelCarrito(${p.id})">Quitar</button>
+              <button class="btn-quitar-item" onclick="eliminarDelCarrito(${p.id})" title="Eliminar producto">🗑️</button>
             </div>
           `;
         }
@@ -1000,6 +1078,21 @@
 
       const formHtml = `
         <div class="cart-form-section">
+          <div class="cart-summary-box">
+            <div class="summary-row">
+              <span>Total de pares:</span>
+              <span><strong>${totalPares}</strong></span>
+            </div>
+            <div class="summary-row">
+              <span>Tasa de cambio:</span>
+              <span><strong>BCV Euro</strong></span>
+            </div>
+            <div class="summary-row total-row">
+              <span>Total a pagar:</span>
+              <span class="summary-total-price">$${totalMonto.toFixed(2)}</span>
+            </div>
+          </div>
+
           <div class="form-group">
             <label class="form-label">Tu Nombre completo</label>
             <input type="text" id="clienteNombre" class="form-input" placeholder="Ej: Alessandro Ropero">
@@ -1009,7 +1102,10 @@
             <input type="text" id="clienteNotas" class="form-input" placeholder="Ej: Entrega en la tarde, detalles de envío, etc.">
           </div>
           <button class="btn-submit-whatsapp" onclick="enviarWhatsApp()">
-            📲 Enviar pedido por WhatsApp
+            <svg class="whatsapp-icon-svg" viewBox="0 0 24 24">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.205 1.652zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.117 4.08 4.26-1.121z"/>
+            </svg>
+            Enviar pedido por WhatsApp
           </button>
         </div>
       `;
@@ -1042,22 +1138,29 @@
       mensaje += `📦 *Detalle del Pedido:*\n`;
 
       let totalPares = 0;
+      let totalMonto = 0;
+
       Object.keys(carrito).forEach(id => {
         const p = productos.find(item => item.id == id);
         const qty = carrito[id];
         if (p) {
-          mensaje += `• ${p.nombre} (${p.categoria}) x${qty}\n`;
+          const precioUnitario = obtenerPrecio(p);
+          const subtotal = precioUnitario * qty;
+          mensaje += `• ${p.nombre} (${p.categoria}) x${qty} - $${subtotal}\n`;
           totalPares += qty;
+          totalMonto += subtotal;
         }
       });
 
       mensaje += `\n🧦 *Total pares:* ${totalPares}\n`;
+      mensaje += `💰 *Total a pagar:* $${totalMonto.toFixed(2)}\n`;
+      mensaje += `💶 *Tasa:* BCV Euro\n`;
 
       if (notas) {
         mensaje += `📝 *Notas:* ${notas}\n`;
       }
 
-      mensaje += `\nQuedo a la espera de la confirmación de disponibilidad y precio. ¡Gracias!`;
+      mensaje += `\nQuedo a la espera de la confirmación. ¡Gracias!`;
 
       const url = `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
       window.open(url, '_blank');
