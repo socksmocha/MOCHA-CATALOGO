@@ -928,87 +928,94 @@
       });
     });
 
+    // FILTRADO POR CATEGORÍA
     function filtrarCategoria(cat) {
       categoriaSeleccionada = cat;
       const botones = document.querySelectorAll('.cat-btn');
       botones.forEach(btn => {
-        if (btn.innerText.includes(cat)) {
+        if ((cat === 'Todo' && btn.innerText.trim() === 'Todo') || btn.innerText.includes(cat)) {
           btn.classList.add('active');
         } else {
           btn.classList.remove('active');
         }
       });
-      renderProductos(document.getElementById('searchInput').value);
+      const searchVal = document.getElementById('searchInput').value;
+      renderProductos(searchVal);
     }
 
-    function renderProductos(busqueda = "") {
+    // RENDERIZADO DE PRODUCTOS EN EL GRID
+    function renderProductos(filtroTexto = '') {
       const grid = document.getElementById('productsGrid');
-      grid.innerHTML = "";
+      grid.innerHTML = '';
 
-      const filtrados = productos.filter(p => {
-        const coincideCat = categoriaSeleccionada === "Todo" || p.categoria === categoriaSeleccionada;
-        const coincideBusqueda = p.nombre.toLowerCase().includes(busqueda.toLowerCase());
-        return coincideCat && coincideBusqueda;
+      const termino = filtroTexto.toLowerCase().trim();
+
+      const productosFiltrados = productos.filter(p => {
+        const coincideCat = (categoriaSeleccionada === 'Todo') || (p.categoria === categoriaSeleccionada);
+        const coincideTexto = p.nombre.toLowerCase().includes(termino);
+        return coincideCat && coincideTexto;
       });
 
-      document.getElementById('modelCount').innerText = `${filtrados.length} modelos`;
+      document.getElementById('modelCount').innerText = `Mostrando ${productosFiltrados.length} modelo(s)`;
 
-      filtrados.forEach(p => {
-        const cantidad = carrito[p.id] || 0;
-        const precio = obtenerPrecio(p);
-
-        let botonOControles = '';
-        if (cantidad === 0) {
-          botonOControles = `<button class="btn-add" onclick="cambiarCantidad(${p.id}, 1)">Agregar</button>`;
-        } else {
-          botonOControles = `
-            <div class="card-qty-controls">
-              <button class="btn-qty-mini" onclick="cambiarCantidad(${p.id}, -1)">-</button>
-              <span class="qty-display">${cantidad}</span>
-              <button class="btn-qty-mini" onclick="cambiarCantidad(${p.id}, 1)">+</button>
-            </div>
-          `;
-        }
+      productosFiltrados.forEach(prod => {
+        const precio = obtenerPrecio(prod);
+        const enCarrito = carrito[prod.id] || 0;
 
         const card = document.createElement('div');
         card.className = 'card';
-        card.innerHTML = `
-          <div>
-            <div class="card-img-wrap">
-              <img src="${p.imagen}" alt="${p.nombre}" class="card-img" onerror="this.src='https://via.placeholder.com/200x200?text=Mocha'">
+
+        let controlHTML = '';
+        if (enCarrito > 0) {
+          controlHTML = `
+            <div class="card-qty-controls">
+              <button class="btn-qty-mini" onclick="cambiarCantidad(${prod.id}, -1)">-</button>
+              <span class="qty-display">${enCarrito}</span>
+              <button class="btn-qty-mini" onclick="cambiarCantidad(${prod.id}, 1)">+</button>
             </div>
-            <div class="card-content">
-              <div class="card-title">${p.nombre}</div>
+          `;
+        } else {
+          controlHTML = `
+            <button class="btn-add" onclick="cambiarCantidad(${prod.id}, 1)">+ Agregar</button>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="card-img-wrap">
+            <img src="${prod.imagen}" alt="${prod.nombre}" class="card-img" onerror="this.src='https://via.placeholder.com/200?text=Mocha'">
+          </div>
+          <div class="card-content">
+            <div>
+              <div class="card-title">${prod.nombre}</div>
               <div class="card-price">$${precio}</div>
             </div>
-          </div>
-          <div style="padding: 0 12px 12px 12px;">
-            ${botonOControles}
+            ${controlHTML}
           </div>
         `;
         grid.appendChild(card);
       });
     }
 
-    function cambiarCantidad(id, cambio) {
-      const actual = carrito[id] || 0;
-      const nueva = actual + cambio;
-
-      if (nueva <= 0) {
+    // GESTIÓN DE CANTIDADES
+    function cambiarCantidad(id, delta) {
+      if (!carrito[id]) carrito[id] = 0;
+      carrito[id] += delta;
+      if (carrito[id] <= 0) {
         delete carrito[id];
-      } else {
-        carrito[id] = nueva;
       }
-
-      actualizarBadges();
+      actualizarCarritoUI();
       renderProductos(document.getElementById('searchInput').value);
-      if (document.getElementById('cartModal').classList.contains('active')) {
-        renderCartModal();
-      }
     }
 
-    function actualizarBadges() {
-      const totalItems = Object.values(carrito).reduce((acc, curr) => acc + curr, 0);
+    function eliminarProducto(id) {
+      delete carrito[id];
+      actualizarCarritoUI();
+      renderProductos(document.getElementById('searchInput').value);
+    }
+
+    // ACTUALIZACIÓN DE INTERFAZ DEL CARRITO
+    function actualizarCarritoUI() {
+      const totalItems = Object.values(carrito).reduce((acc, qty) => acc + qty, 0);
       document.getElementById('cartCountBadge').innerText = totalItems;
       document.getElementById('floatingCount').innerText = totalItems;
 
@@ -1018,153 +1025,121 @@
       } else {
         floatingBar.style.display = 'none';
       }
+
+      if (document.getElementById('cartModal').classList.contains('active')) {
+        renderModalCart();
+      }
     }
 
+    // MODAL DE MI PEDIDO
     function openCartModal() {
-      renderCartModal();
       document.getElementById('cartModal').classList.add('active');
+      renderModalCart();
     }
 
     function closeCartModal() {
       document.getElementById('cartModal').classList.remove('active');
     }
 
-    function renderCartModal() {
-      const modalContent = document.getElementById('modalCartContent');
+    function renderModalCart() {
+      const container = document.getElementById('modalCartContent');
       const itemIds = Object.keys(carrito);
 
       if (itemIds.length === 0) {
-        modalContent.innerHTML = `
-          <div class="empty-cart-msg">
-            <p>Tu pedido está vacío 🛒</p>
-            <p style="font-size: 0.85rem; margin-top: 8px;">¡Agrega algunas medias para comenzar!</p>
-          </div>
-        `;
+        container.innerHTML = `<div class="empty-cart-msg">Tu pedido está vacío 🛒<br>¡Agrega algunos diseños para comenzar!</div>`;
         return;
       }
 
-      let itemsHtml = '<div class="cart-items-container">';
-      let totalPares = 0;
-      let totalMonto = 0;
+      let itemsHTML = '<div class="cart-items-container">';
+      let totalUSD = 0;
 
       itemIds.forEach(id => {
-        const p = productos.find(item => item.id == id);
+        const prod = productos.find(p => p.id == id);
+        if (!prod) return;
         const qty = carrito[id];
-        if (p) {
-          const precioUnitario = obtenerPrecio(p);
-          const subtotal = precioUnitario * qty;
-          totalPares += qty;
-          totalMonto += subtotal;
+        const precio = obtenerPrecio(prod);
+        const subtotal = precio * qty;
+        totalUSD += subtotal;
 
-          itemsHtml += `
-            <div class="cart-item-row">
-              <img src="${p.imagen}" alt="${p.nombre}" class="cart-item-img" onerror="this.src='https://via.placeholder.com/60?text=Mocha'">
-              <div class="cart-item-details">
-                <div class="cart-item-name">${p.nombre}</div>
-                <div class="cart-item-subtext">${p.categoria} · $${precioUnitario} c/u ($${subtotal})</div>
-                <div class="cart-item-qty-row">
-                  <button class="btn-circle-qty" onclick="cambiarCantidad(${p.id}, -1)">-</button>
-                  <span class="cart-qty-num">${qty}</span>
-                  <button class="btn-circle-qty" onclick="cambiarCantidad(${p.id}, 1)">+</button>
-                </div>
+        itemsHTML += `
+          <div class="cart-item-row">
+            <img src="${prod.imagen}" alt="${prod.nombre}" class="cart-item-img" onerror="this.src='https://via.placeholder.com/60?text=Mocha'">
+            <div class="cart-item-details">
+              <span class="cart-item-name">${prod.nombre}</span>
+              <span class="cart-item-subtext">$${precio} c/u &bull; Subtotal: $${subtotal}</span>
+              <div class="cart-item-qty-row">
+                <button class="btn-circle-qty" onclick="cambiarCantidad(${prod.id}, -1)">-</button>
+                <span class="cart-qty-num">${qty}</span>
+                <button class="btn-circle-qty" onclick="cambiarCantidad(${prod.id}, 1)">+</button>
               </div>
-              <button class="btn-quitar-item" onclick="eliminarDelCarrito(${p.id})" title="Eliminar producto">🗑️</button>
             </div>
-          `;
-        }
+            <button class="btn-quitar-item" onclick="eliminarProducto(${prod.id})" title="Eliminar">🗑️</button>
+          </div>
+        `;
       });
-      itemsHtml += '</div>';
 
-      const formHtml = `
+      itemsHTML += '</div>';
+
+      const formHTML = `
         <div class="cart-form-section">
           <div class="cart-summary-box">
             <div class="summary-row">
-              <span>Total de pares:</span>
-              <span><strong>${totalPares}</strong></span>
-            </div>
-            <div class="summary-row">
-              <span>Tasa de cambio:</span>
-              <span><strong>BCV Euro</strong></span>
+              <span>Total acumulado:</span>
+              <span>$${totalUSD}</span>
             </div>
             <div class="summary-row total-row">
               <span>Total a pagar:</span>
-              <span class="summary-total-price">$${totalMonto.toFixed(2)}</span>
+              <span class="summary-total-price">$${totalUSD}</span>
             </div>
           </div>
 
           <div class="form-group">
-            <label class="form-label">Tu Nombre completo</label>
-            <input type="text" id="clienteNombre" class="form-input" placeholder="Ej: Alessandro Ropero">
+            <label class="form-label">Nombre y Apellido *</label>
+            <input type="text" id="clienteNombre" class="form-input" placeholder="Ej: María Pérez">
           </div>
+
           <div class="form-group">
-            <label class="form-label">Notas o comentarios (opcional)</label>
-            <input type="text" id="clienteNotas" class="form-input" placeholder="Ej: Entrega en la tarde, detalles de envío, etc.">
+            <label class="form-label">Método de Pago / Entrega *</label>
+            <input type="text" id="clienteNotas" class="form-input" placeholder="Ej: Pago Móvil / Delivery">
           </div>
-          <button class="btn-submit-whatsapp" onclick="enviarWhatsApp()">
+
+          <button class="btn-submit-whatsapp" onclick="enviarWhatsApp(${totalUSD})">
             <svg class="whatsapp-icon-svg" viewBox="0 0 24 24">
-              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.205 1.652zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.117 4.08 4.26-1.121z"/>
+              <path d="M12.031 0C5.385 0 0 5.388 0 12.035c0 2.124.553 4.197 1.602 6.013L0 24l6.138-1.574a12.022 12.022 0 005.893 1.536h.005c6.645 0 12.032-5.39 12.032-12.037C24.068 5.388 18.678 0 12.031 0zm0 22.032c-1.802 0-3.57-.484-5.116-1.4l-.367-.218-3.8 0.974 1.012-3.702-.239-.38a9.992 9.992 0 01-1.532-5.271c0-5.534 4.502-10.035 10.042-10.035 5.538 0 10.04 4.501 10.04 10.035 0 5.536-4.502 10.037-10.04 10.037z"/>
             </svg>
-            Enviar pedido por WhatsApp
+            Enviar Pedido por WhatsApp
           </button>
         </div>
       `;
 
-      modalContent.innerHTML = itemsHtml + formHtml;
+      container.innerHTML = itemsHTML + formHTML;
     }
 
-    function eliminarDelCarrito(id) {
-      delete carrito[id];
-      actualizarBadges();
-      renderProductos(document.getElementById('searchInput').value);
-      renderCartModal();
-    }
+    // ENVÍO DE PEDIDO A WHATSAPP
+    function enviarWhatsApp(totalUSD) {
+      const nombre = document.getElementById('clienteNombre')?.value.trim() || 'Cliente';
+      const notas = document.getElementById('clienteNotas')?.value.trim() || 'No especificado';
 
-    function enviarWhatsApp() {
-      const nombre = document.getElementById('clienteNombre').value.trim();
-      const notas = document.getElementById('clienteNotas').value.trim();
-
-      if (Object.keys(carrito).length === 0) {
-        alert("Tu pedido está vacío.");
-        return;
-      }
-
-      let mensaje = "¡Hola Mocha! 👋 Quisiera realizar el siguiente pedido:\n\n";
-      
-      if (nombre) {
-        mensaje += `👤 *Cliente:* ${nombre}\n`;
-      }
-      
-      mensaje += `📦 *Detalle del Pedido:*\n`;
-
-      let totalPares = 0;
-      let totalMonto = 0;
+      let mensaje = `*¡Hola Mocha! Quisiera realizar un pedido:*\n\n`;
+      mensaje += `👤 *Cliente:* ${nombre}\n`;
+      mensaje += `📝 *Método / Notas:* ${notas}\n\n`;
+      mensaje += `🛍️ *PRODUCTOS SELECCIONADOS:*\n`;
 
       Object.keys(carrito).forEach(id => {
-        const p = productos.find(item => item.id == id);
-        const qty = carrito[id];
-        if (p) {
-          const precioUnitario = obtenerPrecio(p);
-          const subtotal = precioUnitario * qty;
-          mensaje += `• ${p.nombre} (${p.categoria}) x${qty} - $${subtotal}\n`;
-          totalPares += qty;
-          totalMonto += subtotal;
+        const prod = productos.find(p => p.id == id);
+        if (prod) {
+          const qty = carrito[id];
+          const precio = obtenerPrecio(prod);
+          mensaje += `• ${prod.nombre} (x${qty}) - $${precio * qty}\n`;
         }
       });
 
-      mensaje += `\n🧦 *Total pares:* ${totalPares}\n`;
-      mensaje += `💰 *Total a pagar:* $${totalMonto.toFixed(2)}\n`;
-      mensaje += `💶 *Tasa:* BCV Euro\n`;
-
-      if (notas) {
-        mensaje += `📝 *Notas:* ${notas}\n`;
-      }
-
-      mensaje += `\nQuedo a la espera de la confirmación. ¡Gracias!`;
+      mensaje += `\n💵 *TOTAL ESTIMADO: $${totalUSD}*\n`;
+      mensaje += `\nQuedo atento para completar la orden. ¡Gracias!`;
 
       const url = `https://wa.me/${TELEFONO_WHATSAPP}?text=${encodeURIComponent(mensaje)}`;
       window.open(url, '_blank');
     }
   </script>
-
 </body>
 </html>
