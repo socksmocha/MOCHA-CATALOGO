@@ -709,9 +709,9 @@
     <div class="categories-bar">
       <button class="cat-btn active" onclick="filtrarCategoria('Todo')">Todo</button>
       <button class="cat-btn" onclick="filtrarCategoria('Largas')">Largas ($5)</button>
-      <button class="cat-btn" onclick="filtrarCategoria('Medianas')">Medianas ($4)</button>
-      <button class="cat-btn" onclick="filtrarCategoria('Cortas')">Cortas ($3)</button>
-      <button class="cat-btn" onclick="filtrarCategoria('Especiales')">Especiales ($5)</button>
+      <button class="cat-btn" onclick="filtrarCategoria('Medianas')">Medianas ($5)</button>
+      <button class="cat-btn" onclick="filtrarCategoria('Cortas')">Cortas ($5)</button>
+      <button class="cat-btn" onclick="filtrarCategoria('Especiales')">Especiales</button>
     </div>
 
     <!-- CONTADOR DE PRODUCTOS -->
@@ -1079,14 +1079,10 @@
     let categoriaSeleccionada = "Todo";
 
     function obtenerPrecio(producto) {
-      if (producto.precio !== undefined) return producto.precio;
-      switch (producto.categoria) {
-        case 'Largas': return 5;
-        case 'Medianas': return 4;
-        case 'Cortas': return 3;
-        case 'Especiales': return 5;
-        default: return 5;
+      if (producto.categoria === 'Especiales') {
+        return producto.precio !== undefined ? producto.precio : 5;
       }
+      return 5;
     }
 
     document.addEventListener("DOMContentLoaded", () => {
