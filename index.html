@@ -657,7 +657,7 @@
   <!-- HEADER -->
   <header>
     <div class="brand-container">
-      <img src="LOGO.jpg" alt="Mocha Logo" class="brand-logo-img" onerror="this.style.display='none'">
+      <img src="logo.jpg" alt="Mocha Logo" class="brand-logo-img">
       <div class="brand-text">
         <h1>Mocha</h1>
         <span>CATÁLOGO</span>
@@ -708,9 +708,9 @@
     <!-- CATEGORÍAS -->
     <div class="categories-bar">
       <button class="cat-btn active" onclick="filtrarCategoria('Todo')">Todo</button>
-      <button class="cat-btn" onclick="filtrarCategoria('Largas')">Largas ($5)</button>
-      <button class="cat-btn" onclick="filtrarCategoria('Medianas')">Medianas ($5)</button>
-      <button class="cat-btn" onclick="filtrarCategoria('Cortas')">Cortas ($5)</button>
+      <button class="cat-btn" onclick="filtrarCategoria('Largas')">Largas</button>
+      <button class="cat-btn" onclick="filtrarCategoria('Medianas')">Medianas</button>
+      <button class="cat-btn" onclick="filtrarCategoria('Cortas')">Cortas</button>
       <button class="cat-btn" onclick="filtrarCategoria('Especiales')">Especiales</button>
     </div>
 
@@ -744,7 +744,7 @@
   <script>
     const productos = [
       { id: 1, nombre: "Stitch Rayas (Gris / Azul)", categoria: "Largas", imagen: "media_1.jpeg" },
-      { id: 2, nombre: "Off The Wall (Negro)", categoria: "Largas", imagen: "media_2.jpeg" },
+      { id: 2, nombre: "Harry Potter Casas (Negro)", categoria: "Largas", imagen: "media_2.jpeg" },
       { id: 3, nombre: "Shaggy y Flores (Azul Oscuro)", categoria: "Medianas", imagen: "media_3.jpeg" },
       { id: 4, nombre: "Stitch Trouble Maker (Gris)", categoria: "Largas", imagen: "media_4.jpeg" },
       { id: 5, nombre: "Tomates \"M\" (Rojo / Verde)", categoria: "Largas", imagen: "media_5.jpeg" },
@@ -757,7 +757,7 @@
       { id: 13, nombre: "Ositos Cariñositos \"Let's Talk About It\" (Gris)", categoria: "Cortas", imagen: "media_13.jpeg" },
       { id: 14, nombre: "Stitch 626 (Morado)", categoria: "Largas", imagen: "media_14.jpeg" },
       { id: 15, nombre: "Hello Kitty Lazo Rojo (Blanca)", categoria: "Cortas", imagen: "media_15.jpeg" },
-      { id: 16, nombre: "Pikachu \"Relax\" Tobillera (Amarillo)", categoria: "Cortas", imagen: "media_16.jpeg" },
+      { id: 16, nombre: "Woodstock \"Relax\" Tobillera (Amarillo)", categoria: "Cortas", imagen: "media_16.jpeg" },
       { id: 17, nombre: "Gary el Caracol (Gris)", categoria: "Cortas", imagen: "media_17.jpeg" },
       { id: 18, nombre: "Siluetas Mickey Mouse (Gris)", categoria: "Medianas", imagen: "media_18.jpeg" },
       { id: 19, nombre: "Mickey Mouse Rayas (Blanco / Negro)", categoria: "Cortas", imagen: "media_19.jpeg" },
@@ -779,7 +779,7 @@
       { id: 35, nombre: "Bob Esponja y Medusas (Azul)", categoria: "Cortas", imagen: "media_35.jpeg" },
       { id: 36, nombre: "Pingüino Rayas Multicolores (Multicolor)", categoria: "Cortas", imagen: "media_36.jpeg" },
       { id: 37, nombre: "Winnie the Pooh Rayas (Azul)", categoria: "Cortas", imagen: "media_37.jpeg" },
-      { id: 38, nombre: "Panqueques \"100% Delicious\" (Blanco)", categoria: "Cortas", imagen: "media_38.jpeg" },
+      { id: 38, nombre: "Harry Potter Libros" (Blanco)", categoria: "Cortas", imagen: "media_38.jpeg" },
       { id: 39, nombre: "Jurassic Park Huellas y Logo (Negro / Rojo)", categoria: "Largas", imagen: "media_39.jpeg" },
       { id: 40, nombre: "Hogwarts Rayas (Azul / Gris)", categoria: "Largas", imagen: "media_40.jpeg" },
       { id: 41, nombre: "Hello Kitty (Verde Menta)", categoria: "Cortas", imagen: "media_41.jpeg" },
@@ -798,7 +798,7 @@
       { id: 54, nombre: "Hot Wheels Epic! (Amarillo)", categoria: "Largas", imagen: "media_54.jpeg" },
       { id: 55, nombre: "Scooby-Doo Máquina del Misterio (Blanco)", categoria: "Medianas", imagen: "media_55.jpeg" },
       { id: 56, nombre: "Correcaminos y Coyote (Multicolor)", categoria: "Largas", imagen: "media_56.jpeg" },
-      { id: 57, nombre: "Pato Donald Piernas (Azul)", categoria: "Cortas", imagen: "media_57.jpeg" },
+      { id: 57, nombre: "Don Cangrejo (Azul)", categoria: "Cortas", imagen: "media_57.jpeg" },
       { id: 58, nombre: "Ned Flanders / Los Simpson (Verde / Marrón)", categoria: "Largas", imagen: "media_58.jpeg" },
       { id: 59, nombre: "Mario Bros (Rojo)", categoria: "Largas", imagen: "media_59.jpeg" },
       { id: 60, nombre: "Rayas Fucsia Sanrio (Fucsia)", categoria: "Cortas", imagen: "media_60.jpeg" },
@@ -840,10 +840,10 @@
       { id: 96, nombre: "Pac-Man Patrón (Celeste)", categoria: "Largas", imagen: "media_96.jpeg" },
       { id: 97, nombre: "Waddle Dee / Kirby (Amarillo / Negro)", categoria: "Largas", imagen: "media_97.jpeg" },
       { id: 98, nombre: "Harry Potter Cartas Hogwarts (Negro)", categoria: "Cortas", imagen: "media_98.jpeg" },
-      { id: 99, nombre: "Tubos de Ensayo (Negro)", categoria: "Largas", imagen: "media_99.jpeg" },
+      { id: 99, nombre: "Sorry (Negro)", categoria: "Largas", imagen: "media_99.jpeg" },
       { id: 100, nombre: "Snoopy Good Grief (Azul / Rojo)", categoria: "Largas", imagen: "media_100.jpeg" },
       { id: 101, nombre: "Caras Sonrientes (Blanco / Rojo)", categoria: "Largas", imagen: "media_101.jpeg" },
-      { id: 102, nombre: "Batalla Naval (Gris)", categoria: "Largas", imagen: "media_102.jpeg" },
+      { id: 102, nombre: "Pokemon Battle (Gris)", categoria: "Largas", imagen: "media_102.jpeg" },
       { id: 103, nombre: "Keroppi Ranita (Blanco / Verde)", categoria: "Cortas", imagen: "media_103.jpeg" },
       { id: 104, nombre: "Scooby-Doo Máquina del Misterio (Verde Menta)", categoria: "Medianas", imagen: "media_104.jpeg" },
       { id: 105, nombre: "Twister (Gris)", categoria: "Largas", imagen: "media_105.jpeg" },
@@ -851,7 +851,7 @@
       { id: 107, nombre: "Personajes Anime (Negro)", categoria: "Largas", imagen: "media_107.jpeg" },
       { id: 108, nombre: "Pac-Man Fantasmas (Negro)", categoria: "Largas", imagen: "media_108.jpeg" },
       { id: 109, nombre: "Hungry Hungry Hippos (Gris)", categoria: "Largas", imagen: "media_109.jpeg" },
-      { id: 110, nombre: "Jirafas (Beige)", categoria: "Cortas", imagen: "media_110.jpeg" },
+      { id: 110, nombre: "Harry Potter Escobas (Beige)", categoria: "Cortas", imagen: "media_110.jpeg" },
       { id: 111, nombre: "Charlie Brown (Amarillo / Negro)", categoria: "Largas", imagen: "media_111.jpeg" },
       { id: 112, nombre: "Hello Kitty Rayas Verdes (Gris)", categoria: "Medianas", imagen: "media_112.jpeg" },
       { id: 113, nombre: "Cheesy Poofs / South Park (Verde / Amarillo)", categoria: "Largas", imagen: "media_113.jpeg" },
@@ -1097,7 +1097,7 @@
       categoriaSeleccionada = cat;
       const botones = document.querySelectorAll('.cat-btn');
       botones.forEach(btn => {
-        if ((cat === 'Todo' && btn.innerText.trim() === 'Todo') || btn.innerText.includes(cat)) {
+        if ((cat === 'Todo' && btn.innerText.trim() === 'Todo') || btn.innerText.trim() === cat) {
           btn.classList.add('active');
         } else {
           btn.classList.remove('active');
