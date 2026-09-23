@@ -1082,6 +1082,12 @@
       if (producto.categoria === 'Especiales') {
         return producto.precio !== undefined ? producto.precio : 5;
       }
+      if (producto.categoria === 'Medianas') {
+        return 4;
+      }
+      if (producto.categoria === 'Cortas') {
+        return 3;
+      }
       return 5;
     }
 
