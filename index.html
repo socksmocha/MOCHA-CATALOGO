@@ -1078,6 +1078,11 @@
     let carrito = {};
     let categoriaSeleccionada = "Todo";
 
+    function obtenerNumeroImagen(imagen) {
+      const match = imagen.match(/(\d+)/);
+      return match ? parseInt(match[1], 10) : 0;
+    }
+
     function obtenerPrecio(producto) {
       if (producto.categoria === 'Especiales') {
         return producto.precio !== undefined ? producto.precio : 5;
@@ -1123,6 +1128,13 @@
         const coincideCat = (categoriaSeleccionada === 'Todo') || (p.categoria === categoriaSeleccionada);
         const coincideTexto = p.nombre.toLowerCase().includes(termino) || p.id.toString() === termino;
         return coincideCat && coincideTexto;
+      }).sort((a, b) => {
+        const numA = obtenerNumeroImagen(a.imagen);
+        const numB = obtenerNumeroImagen(b.imagen);
+        const esViejaA = numA <= 132;
+        const esViejaB = numB <= 132;
+        if (esViejaA === esViejaB) return 0;
+        return esViejaA ? 1 : -1;
       });
 
       document.getElementById('modelCount').innerText = `Mostrando ${productosFiltrados.length} modelo(s)`;
